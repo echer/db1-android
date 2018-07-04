@@ -15,15 +15,19 @@ import br.com.db1.githubwrapper.BaseActivity;
 import br.com.db1.githubwrapper.BaseApplication;
 import br.com.db1.githubwrapper.R;
 import br.com.db1.githubwrapper.data.model.Repositorio;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class GithubActivity extends BaseActivity implements GithubContract.View{
 
     @Inject
     GithubContract.Presenter presenter;
 
+    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    TextView connectionPlaceHolder;
+    @BindView(R.id.tvNotFound)
+    TextView tvNotFound;
 
     private int pagina;
 
@@ -33,6 +37,7 @@ public class GithubActivity extends BaseActivity implements GithubContract.View{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_github);
+        ButterKnife.bind(this);
         initDependencyInjection();
     }
 
@@ -51,17 +56,20 @@ public class GithubActivity extends BaseActivity implements GithubContract.View{
     @Override
     protected void onResume() {
         super.onResume();
-        //initDependencyInjection();
+        initDependencyInjection();
         registerEventListeners();
     }
 
     @Override
     protected void onPause() {
         unregisterEventListeners();
-        //releaseDependencyInjection();
+        releaseDependencyInjection();
         super.onPause();
     }
 
+    private void releaseDependencyInjection() {
+        githubActivityComponent = null;
+    }
 
     @Override
     public void exibirRepositorios(List<Repositorio> repositorios) {
