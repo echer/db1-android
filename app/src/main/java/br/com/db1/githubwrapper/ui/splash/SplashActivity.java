@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import br.com.db1.githubwrapper.R;
 import br.com.db1.githubwrapper.ui.github.GithubActivity;
 
-public class SplashActivity extends AppCompatActivity implements SplashMvpView {
+public class SplashActivity extends AppCompatActivity implements SplashContract.View {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
