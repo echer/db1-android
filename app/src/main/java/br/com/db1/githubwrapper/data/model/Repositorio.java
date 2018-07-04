@@ -13,6 +13,17 @@ public class Repositorio {
     @SerializedName("description")
     private String descricao;
 
+    @SerializedName("owner")
+    private Dono dono;
+
+    public Dono getDono() {
+        return dono;
+    }
+
+    public void setDono(Dono dono) {
+        this.dono = dono;
+    }
+
     public long getId() {
         return id;
     }
