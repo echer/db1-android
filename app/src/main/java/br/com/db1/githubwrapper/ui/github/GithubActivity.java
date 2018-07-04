@@ -11,13 +11,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.com.db1.githubwrapper.BaseActivity;
+import br.com.db1.githubwrapper.BaseApplication;
 import br.com.db1.githubwrapper.R;
 import br.com.db1.githubwrapper.data.model.Repositorio;
 
-public class GithubActivity extends AppCompatActivity implements GithubContract.View{
+public class GithubActivity extends BaseActivity implements GithubContract.View{
 
     @Inject
-    private GithubContract.Presenter presenter;
+    GithubContract.Presenter presenter;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -25,10 +27,25 @@ public class GithubActivity extends AppCompatActivity implements GithubContract.
 
     private int pagina;
 
+    private GithubActivityComponent githubActivityComponent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_github);
+        initDependencyInjection();
+    }
+
+    protected void initDependencyInjection() {
+        super.initDependencyInjection();
+        if (githubActivityComponent == null) {
+            githubActivityComponent = DaggerGithubActivityComponent.builder()
+                    .applicationComponent(applicationComponent)
+                    .githubModule(new GithubModule(this))
+                    .build();
+
+            githubActivityComponent.inject(this);
+        }
     }
 
     @Override
