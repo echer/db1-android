@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GithubWrapper</string>
+    <string name="images_db1_logo">Logo da DB1</string>
 </resources>
