@@ -36,11 +36,12 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
 
     private int pagina = 1;
 
+    private boolean isCreatedOnce;
+
     private GithubActivityComponent githubActivityComponent;
 
     private GithubRecyclerAdapter recyclerAdapter;
     private EndlessRecyclerViewScrollListener endlessScrollListener;
-    private boolean shouldRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,6 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     }
 
     private void refresh(int page) {
-        shouldRefresh = true;
         presenter.obterRepositorios(getContext().getApplicationContext(), page);
     }
 
@@ -99,6 +99,14 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
         super.onResume();
         initDependencyInjection();
         registerEventListeners();
+        initData();
+    }
+
+    private void initData() {
+        if (!isCreatedOnce) {
+            isCreatedOnce = true;
+            refresh(1);
+        }
     }
 
     @Override
@@ -114,11 +122,6 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
 
     @Override
     public void exibirRepositorios(List<Repositorio> repositorios) {
-        if (shouldRefresh) {
-            recyclerAdapter.clear();
-            endlessScrollListener.resetState();
-            shouldRefresh = false;
-        }
         recyclerAdapter.addAll(repositorios);
     }
 
@@ -128,8 +131,6 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
             Toast.makeText(this, getString(R.string.offline_message), Toast.LENGTH_SHORT).show();
             return;
         }
-
-        presenter.obterRepositorios(this, pagina);
     }
 
     private void registerEventListeners() {

@@ -71,10 +71,6 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
                 .placeholder(R.drawable.ic_person_outline_black_24dp)
                 .error(R.drawable.ic_error_black_24dp)
                 .into(viewHolder.ivFoto);
-
-        /*Glide.with(fragment).load(presenter.getPhotoUrl(photo)).placeholder(
-                R.drawable.drawable_placeholder).error(
-                R.drawable.drawable_placeholder).into(viewHolder.ivPhoto);*/
     }
 
     @Override
@@ -82,15 +78,8 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
         return repositorios.size();
     }
 
-    public void clear() {
-        int size = getItemCount();
-        repositorios.clear();
-        notifyItemRangeRemoved(0, size);
-    }
-
     public void addAll(List<Repositorio> photos) {
-        int prevSize = getItemCount();
         this.repositorios.addAll(photos);
-        notifyItemRangeInserted(prevSize, photos.size());
+        notifyDataSetChanged();
     }
 }
