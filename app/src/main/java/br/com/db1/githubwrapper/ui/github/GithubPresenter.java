@@ -40,6 +40,25 @@ public class GithubPresenter implements GithubContract.Presenter {
     }
 
     @Override
+    public void obterRepositorios(Context context, String username) {
+        view.setProgressBar(true);
+        Subscription subscription = dataRepository.getRepositorios(
+                context,
+                username,
+                1,
+                repositorios -> {
+                    view.limparRepositorios();
+                    view.exibirRepositorios(repositorios);
+                    view.setProgressBar(false);
+                },
+                throwable -> {
+                    view.setProgressBar(false);
+                }
+        );
+        compositeSubscription.add(subscription);
+    }
+
+    @Override
     public void subscribeEventStream() {
         Observable<Boolean> observable = connectivityBroadcastReceiver.registerReceiver();
         Subscription subscription = observable.subscribe(view::showOfflineMsg);

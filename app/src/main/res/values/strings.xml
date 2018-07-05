@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">GithubWrapper</string>
+    <string name="app_name">Github Search</string>
     <string name="images_db1_logo">Logo da DB1</string>
     <string name="offline_message">Você não esta conectado...</string>
     <string name="repositorios_nao_encontrados">Nenhum repositório encontrado</string>
+    <string name="search">Buscar por Usuario</string>
+    <string name="search_hint">Digite o usuário</string>
 </resources>

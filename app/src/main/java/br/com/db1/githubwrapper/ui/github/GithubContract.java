@@ -12,11 +12,15 @@ public interface GithubContract {
     interface View extends IBaseView {
         void exibirRepositorios(List<Repositorio> repositorios);
 
+        void limparRepositorios();
+
         void showOfflineMsg(boolean networkAvailable);
     }
 
     interface Presenter {
         void obterRepositorios(Context context, int pagina);
+
+        void obterRepositorios(Context context, String username);
 
         void subscribeEventStream();
 

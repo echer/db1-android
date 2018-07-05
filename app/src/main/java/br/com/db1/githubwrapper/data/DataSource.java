@@ -23,4 +23,6 @@ public abstract class DataSource {
 
     public abstract Observable<List<Repositorio>> obtemRepositorios(int page);
 
+    public abstract Observable<List<Repositorio>> obtemRepositorios(String username);
+
 }

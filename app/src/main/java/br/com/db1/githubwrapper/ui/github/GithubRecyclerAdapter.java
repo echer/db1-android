@@ -78,6 +78,11 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
         return repositorios.size();
     }
 
+    public void clear() {
+        repositorios.clear();
+        notifyDataSetChanged();
+    }
+
     public void addAll(List<Repositorio> photos) {
         this.repositorios.addAll(photos);
         notifyDataSetChanged();

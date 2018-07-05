@@ -2,9 +2,14 @@ package br.com.db1.githubwrapper.ui.github;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,12 +39,14 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     @BindView(R.id.tvNotFound)
     TextView tvNotFound;
 
-    private int pagina = 1;
+    SearchView searchView;
 
-    private boolean isCreatedOnce;
+    private int pagina = 1;
+    private boolean isCriacao;
+    private boolean isFirstClickBusca = true;
+    private boolean isBuscaUsuario = false;
 
     private GithubActivityComponent githubActivityComponent;
-
     private GithubRecyclerAdapter recyclerAdapter;
     private EndlessRecyclerViewScrollListener endlessScrollListener;
 
@@ -52,8 +59,68 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
         initViews();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.activity_github_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem searchViewMenuItem = menu.findItem(R.id.search);
+        searchView = (SearchView) searchViewMenuItem.getActionView();
+        ImageView v = searchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+        v.setImageResource(R.drawable.ic_search_black_24dp);
+
+        searchViewMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                isBuscaUsuario = false;
+                swipeRefreshLayout.setEnabled(true);
+                limparRepositorios();
+                presenter.obterRepositorios(getContext(), 1);
+                return true;
+            }
+        });
+
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                isBuscaUsuario = true;
+                swipeRefreshLayout.setEnabled(false);
+                presenter.obterRepositorios(getContext(), query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(isFirstClickBusca){
+                    isFirstClickBusca = false;
+                    return false;
+                }
+
+                if(newText == null || newText.isEmpty()) {
+                    isBuscaUsuario = false;
+                    swipeRefreshLayout.setEnabled(true);
+                    limparRepositorios();
+                    presenter.obterRepositorios(getContext(), 1);
+                }
+                return false;
+            }
+        });
+        return true;
+    }
+
     private void initViews() {
-        recyclerAdapter = new GithubRecyclerAdapter(this, presenter, new ArrayList<Repositorio>());
+        recyclerAdapter = new GithubRecyclerAdapter(this, presenter, new ArrayList<>());
         recyclerGithubRepos.setAdapter(recyclerAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -62,7 +129,8 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
         endlessScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager, pagina) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                refresh(page);
+                if(!isBuscaUsuario)
+                    refresh(page);
             }
         };
 
@@ -73,7 +141,10 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
             //CHAMA DETALHES
         });
 
-        swipeRefreshLayout.setOnRefreshListener(() -> refresh(1));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if(!isBuscaUsuario)
+                refresh(1);
+        });
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorPrimary);
     }
@@ -103,8 +174,8 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     }
 
     private void initData() {
-        if (!isCreatedOnce) {
-            isCreatedOnce = true;
+        if (!isCriacao) {
+            isCriacao = true;
             refresh(1);
         }
     }
@@ -123,6 +194,11 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     @Override
     public void exibirRepositorios(List<Repositorio> repositorios) {
         recyclerAdapter.addAll(repositorios);
+    }
+
+    @Override
+    public void limparRepositorios() {
+        recyclerAdapter.clear();
     }
 
     @Override
