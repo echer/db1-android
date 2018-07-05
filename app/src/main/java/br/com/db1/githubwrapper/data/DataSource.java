@@ -25,4 +25,6 @@ public abstract class DataSource {
 
     public abstract Observable<List<Repositorio>> obtemRepositorios(String username);
 
+    public abstract Observable<Repositorio> obtemRepositorio(String username, String repo);
+
 }

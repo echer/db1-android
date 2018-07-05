@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Github Search</string>
+    <string name="app_name">Github Repositórios</string>
     <string name="images_db1_logo">Logo da DB1</string>
     <string name="offline_message">Você não esta conectado...</string>
     <string name="repositorios_nao_encontrados">Nenhum repositório encontrado</string>

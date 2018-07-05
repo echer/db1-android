@@ -43,4 +43,17 @@ public class DataRepository {
                         repositorio -> onSuccess.call(repositorio),
                         throwable -> onError.call(throwable));
     }
+
+    public Subscription getRepositorio(Context context, String username, String repo,DataSource.Callback<Repositorio> onSuccess, DataSource.Callback<Throwable> onError){
+
+        if (!networkHelper.isNetworkAvailable(context))
+            return null;
+
+        return remoteDataSource.obtemRepositorio(username, repo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        repositorio -> onSuccess.call(repositorio),
+                        throwable -> onError.call(throwable));
+    }
 }

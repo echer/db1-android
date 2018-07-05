@@ -21,14 +21,14 @@ public class RepositoriosModule {
 
     @Provides
     @ActivityScope
-    public RepositoriosContract.Presenter provideGithubPresenter(RepositoriosContract.View view, DataRepository dataRepository, ConnectivityBroadcastReceiver connectivityBroadcastReceiver) {
+    public RepositoriosContract.Presenter provideRepositorioPresenter(RepositoriosContract.View view, DataRepository dataRepository, ConnectivityBroadcastReceiver connectivityBroadcastReceiver) {
         CompositeSubscription compositeSubscription = new CompositeSubscription();
         return new RepositoriosPresenter(compositeSubscription, dataRepository, connectivityBroadcastReceiver, view);
     }
 
     @Provides
     @ActivityScope
-    public RepositoriosContract.View provideGithubView() {
+    public RepositoriosContract.View provideRepositorioView() {
         return repositoriosActivity;
     }
 

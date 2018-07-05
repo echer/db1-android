@@ -18,7 +18,7 @@ public class RemoteDataSource extends DataSource {
         String BASE_URL = "https://api.github.com";
         String ENDPOINT_REPOS = "/repositories";
         String ENDPOINT_USER_REPOS = "/users/{dono}/repos";
-        String ENDPOINT_REPO_DETAIL = "/repos/%s/%s";
+        String ENDPOINT_REPO_DETAIL = "/repos/{dono}/{repo}";
 
         interface QueryParams {
             String QUERY_PARAM_SINCE = "since";
@@ -46,5 +46,12 @@ public class RemoteDataSource extends DataSource {
         return apiService.obtemRepositoriosPorUsuario(username)
                 .flatMap(response -> Observable.just(response));
     }
+
+    @Override
+    public Observable<Repositorio> obtemRepositorio(String username, String repo) {
+        return apiService.obtemRepositorioPorUsuario(username, repo)
+                .flatMap(response -> Observable.just(response));
+    }
+
 
 }
