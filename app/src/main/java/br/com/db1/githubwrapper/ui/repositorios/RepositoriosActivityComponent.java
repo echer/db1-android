@@ -1,4 +1,4 @@
-package br.com.db1.githubwrapper.ui.github;
+package br.com.db1.githubwrapper.ui.repositorios;
 
 import br.com.db1.githubwrapper.ApplicationComponent;
 import br.com.db1.githubwrapper.data.receivers.ReceiversModule;
@@ -8,11 +8,9 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {ApplicationComponent.class},
-        modules = {GithubModule.class, ReceiversModule.class}
+        modules = {RepositoriosModule.class, ReceiversModule.class}
 )
-public interface GithubActivityComponent {
+public interface RepositoriosActivityComponent {
 
-    GithubContract.Presenter getGithubActivityPresenter();
-
-    void inject(GithubActivity githubActivity);
+    void inject(RepositoriosActivity repositoriosActivity);
 }

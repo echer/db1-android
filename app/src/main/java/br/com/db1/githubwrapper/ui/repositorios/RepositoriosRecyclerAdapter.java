@@ -1,8 +1,6 @@
-package br.com.db1.githubwrapper.ui.github;
+package br.com.db1.githubwrapper.ui.repositorios;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,23 +17,15 @@ import br.com.db1.githubwrapper.data.model.Repositorio;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAdapter.ViewHolder> {
+public class RepositoriosRecyclerAdapter extends RecyclerView.Adapter<RepositoriosRecyclerAdapter.ViewHolder> {
 
     private List<Repositorio> repositorios;
-    private Activity activity;
-    private GithubContract.Presenter presenter;
-    private RecyclerViewClickListener recyclerViewClickListener;
+    private RepositoriosContract.Presenter presenter;
 
-    public GithubRecyclerAdapter(Activity activity, GithubContract.Presenter presenter,
-                                 List<Repositorio> repositorios, RecyclerViewClickListener recyclerViewClickListener) {
-        this.activity = activity;
+    public RepositoriosRecyclerAdapter(RepositoriosContract.Presenter presenter,
+                                       List<Repositorio> repositorios) {
         this.presenter = presenter;
         this.repositorios = repositorios;
-        this.recyclerViewClickListener = recyclerViewClickListener;
-    }
-
-    public interface RecyclerViewClickListener {
-        void recyclerViewListClicked(View v, int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -46,35 +36,37 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
         @BindView(R.id.tvRepoIdNome)
         TextView tvRepoIdNome;
 
-        public ViewHolder(View itemView, RecyclerViewClickListener recyclerViewClickListener) {
+        public ViewHolder(View itemView, RepositoriosContract.Presenter presenter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    recyclerViewClickListener.recyclerViewListClicked(view, getAdapterPosition());
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION)
+                        presenter.abreDetalhesDoRepositorio(getAdapterPosition());
                 }
             });
         }
     }
 
     @Override
-    public GithubRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RepositoriosRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.github_recycler_row, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view, this.recyclerViewClickListener);
+        ViewHolder viewHolder = new ViewHolder(view, this.presenter);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(GithubRecyclerAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RepositoriosRecyclerAdapter.ViewHolder viewHolder, int position) {
 
         Repositorio repositorio = repositorios.get(position);
 
-        viewHolder.tvRepoIdNome.setText(String.format("%s - %s", String.valueOf(repositorio.getId()),repositorio.getNome()));
+        viewHolder.tvRepoIdNome.setText(String.format("%s - %s", String.valueOf(repositorio.getId()), repositorio.getNome()));
 
         Picasso.get()
                 .load(repositorio.getDono().getAvatarUrl())

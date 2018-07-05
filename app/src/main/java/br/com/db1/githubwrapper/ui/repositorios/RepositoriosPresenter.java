@@ -1,4 +1,4 @@
-package br.com.db1.githubwrapper.ui.github;
+package br.com.db1.githubwrapper.ui.repositorios;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,21 +6,21 @@ import android.content.Intent;
 import br.com.db1.githubwrapper.data.DataRepository;
 import br.com.db1.githubwrapper.data.model.Repositorio;
 import br.com.db1.githubwrapper.data.receivers.ConnectivityBroadcastReceiver;
-import br.com.db1.githubwrapper.ui.githubdetalhes.GithubDetalhesActivity;
+import br.com.db1.githubwrapper.ui.repositoriodetalhes.RepositorioDetalhesActivity;
 import rx.Observable;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 import static br.com.db1.githubwrapper.util.Constants.Activity.Extras.GITHUB_DETALHES_REPOSITORIO;
 
-public class GithubPresenter implements GithubContract.Presenter {
+public class RepositoriosPresenter implements RepositoriosContract.Presenter {
 
     private ConnectivityBroadcastReceiver connectivityBroadcastReceiver;
     private CompositeSubscription compositeSubscription;
-    private GithubContract.View view;
+    private RepositoriosContract.View view;
     private DataRepository dataRepository;
 
-    public GithubPresenter(CompositeSubscription compositeSubscription, DataRepository dataRepository, ConnectivityBroadcastReceiver connectivityBroadcastReceiver, GithubContract.View view) {
+    public RepositoriosPresenter(CompositeSubscription compositeSubscription, DataRepository dataRepository, ConnectivityBroadcastReceiver connectivityBroadcastReceiver, RepositoriosContract.View view) {
         this.compositeSubscription = compositeSubscription;
         this.view = view;
         this.connectivityBroadcastReceiver = connectivityBroadcastReceiver;
@@ -80,7 +80,7 @@ public class GithubPresenter implements GithubContract.Presenter {
     public void abreDetalhesDoRepositorio(int position) {
         Repositorio repositorio = view.obtemRepositorioPelaPosicao(position);
 
-        Intent intent = new Intent(view.getContext(), GithubDetalhesActivity.class);
+        Intent intent = new Intent(view.getContext(), RepositorioDetalhesActivity.class);
         intent.putExtra(GITHUB_DETALHES_REPOSITORIO, repositorio);
         view.getContext().startActivity(intent);
     }

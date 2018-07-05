@@ -1,4 +1,4 @@
-package br.com.db1.githubwrapper.ui.github;
+package br.com.db1.githubwrapper.ui.repositorios;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,10 +25,10 @@ import br.com.db1.githubwrapper.util.EndlessRecyclerViewScrollListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GithubActivity extends BaseActivity implements GithubContract.View {
+public class RepositoriosActivity extends BaseActivity implements RepositoriosContract.View {
 
     @Inject
-    GithubContract.Presenter presenter;
+    RepositoriosContract.Presenter presenter;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -46,8 +46,8 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     private boolean isFirstClickBusca = true;
     private boolean isBuscaUsuario = false;
 
-    private GithubActivityComponent githubActivityComponent;
-    private GithubRecyclerAdapter recyclerAdapter;
+    private RepositoriosActivityComponent repositoriosActivityComponent;
+    private RepositoriosRecyclerAdapter recyclerAdapter;
     private EndlessRecyclerViewScrollListener endlessScrollListener;
 
     @Override
@@ -120,14 +120,7 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     }
 
     private void initViews() {
-        recyclerAdapter = new GithubRecyclerAdapter(this, presenter, new ArrayList<>(), new GithubRecyclerAdapter.RecyclerViewClickListener() {
-            @Override
-            public void recyclerViewListClicked(View v, int position) {
-                if (position != RecyclerView.NO_POSITION) {
-                    presenter.abreDetalhesDoRepositorio(position);
-                }
-            }
-        });
+        recyclerAdapter = new RepositoriosRecyclerAdapter(presenter, new ArrayList<>());
         recyclerGithubRepos.setAdapter(recyclerAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -153,13 +146,13 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
 
     protected void initDependencyInjection() {
         super.initDependencyInjection();
-        if (githubActivityComponent == null) {
-            githubActivityComponent = DaggerGithubActivityComponent.builder()
+        if (repositoriosActivityComponent == null) {
+            repositoriosActivityComponent = DaggerRepositoriosActivityComponent.builder()
                     .applicationComponent(applicationComponent)
-                    .githubModule(new GithubModule(this))
+                    .repositoriosModule(new RepositoriosModule(this))
                     .build();
 
-            githubActivityComponent.inject(this);
+            repositoriosActivityComponent.inject(this);
         }
     }
 
@@ -184,7 +177,7 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     }
 
     private void releaseDependencyInjection() {
-        githubActivityComponent = null;
+        repositoriosActivityComponent = null;
     }
 
     @Override

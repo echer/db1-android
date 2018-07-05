@@ -1,4 +1,4 @@
-package br.com.db1.githubwrapper.ui.github;
+package br.com.db1.githubwrapper.ui.repositorios;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import br.com.db1.githubwrapper.data.model.Repositorio;
 import br.com.db1.githubwrapper.ui.base.IBaseView;
 
-public interface GithubContract {
+public interface RepositoriosContract {
 
     interface View extends IBaseView {
         void exibirRepositorios(List<Repositorio> repositorios);

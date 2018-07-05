@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import br.com.db1.githubwrapper.R;
-import br.com.db1.githubwrapper.ui.github.GithubActivity;
+import br.com.db1.githubwrapper.ui.repositorios.RepositoriosActivity;
 
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {
 
@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     @Override
     public void openGitHubWrapperActivity() {
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, GithubActivity.class);
+            Intent intent = new Intent(SplashActivity.this, RepositoriosActivity.class);
             startActivity(intent);
             finish();
         }, 1300);

@@ -23,9 +23,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.github.GithubActivity"
+            android:name=".ui.repositorios.RepositoriosActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.githubdetalhes.GithubDetalhesActivity"></activity>
+        <activity android:name=".ui.repositoriodetalhes.RepositorioDetalhesActivity"></activity>
     </application>
 
 </manifest>

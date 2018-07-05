@@ -1,15 +1,14 @@
-package br.com.db1.githubwrapper.ui.githubdetalhes;
+package br.com.db1.githubwrapper.ui.repositoriodetalhes;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import br.com.db1.githubwrapper.BaseActivity;
 import br.com.db1.githubwrapper.R;
 import br.com.db1.githubwrapper.data.model.Repositorio;
-import br.com.db1.githubwrapper.util.Constants;
 
 import static br.com.db1.githubwrapper.util.Constants.Activity.Extras.GITHUB_DETALHES_REPOSITORIO;
 
-public class GithubDetalhesActivity extends AppCompatActivity {
+public class RepositorioDetalhesActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
