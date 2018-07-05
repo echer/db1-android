@@ -1,12 +1,17 @@
 package br.com.db1.githubwrapper.ui.github;
 
 import android.content.Context;
+import android.content.Intent;
 
 import br.com.db1.githubwrapper.data.DataRepository;
+import br.com.db1.githubwrapper.data.model.Repositorio;
 import br.com.db1.githubwrapper.data.receivers.ConnectivityBroadcastReceiver;
+import br.com.db1.githubwrapper.ui.githubdetalhes.GithubDetalhesActivity;
 import rx.Observable;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
+
+import static br.com.db1.githubwrapper.util.Constants.Activity.Extras.GITHUB_DETALHES_REPOSITORIO;
 
 public class GithubPresenter implements GithubContract.Presenter {
 
@@ -69,6 +74,15 @@ public class GithubPresenter implements GithubContract.Presenter {
     public void unsubscribeEventStream() {
         compositeSubscription.clear();
         connectivityBroadcastReceiver.unregisterReceiver();
+    }
+
+    @Override
+    public void abreDetalhesDoRepositorio(int position) {
+        Repositorio repositorio = view.obtemRepositorioPelaPosicao(position);
+
+        Intent intent = new Intent(view.getContext(), GithubDetalhesActivity.class);
+        intent.putExtra(GITHUB_DETALHES_REPOSITORIO, repositorio);
+        view.getContext().startActivity(intent);
     }
 
 }

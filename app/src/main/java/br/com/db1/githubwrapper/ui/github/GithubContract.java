@@ -14,6 +14,8 @@ public interface GithubContract {
 
         void limparRepositorios();
 
+        Repositorio obtemRepositorioPelaPosicao(int position);
+
         void showOfflineMsg(boolean networkAvailable);
     }
 
@@ -25,5 +27,7 @@ public interface GithubContract {
         void subscribeEventStream();
 
         void unsubscribeEventStream();
+
+        void abreDetalhesDoRepositorio(int position);
     }
 }
