@@ -24,7 +24,8 @@
         </activity>
         <activity
             android:name=".ui.github.GithubActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.githubdetalhes.GithubDetalhesActivity"></activity>
     </application>
 
 </manifest>

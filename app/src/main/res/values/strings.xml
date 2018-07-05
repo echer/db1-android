@@ -5,4 +5,5 @@
     <string name="repositorios_nao_encontrados">Nenhum repositório encontrado</string>
     <string name="search">Buscar por Usuario</string>
     <string name="search_hint">Digite o usuário</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 </resources>

@@ -24,12 +24,18 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
     private List<Repositorio> repositorios;
     private Activity activity;
     private GithubContract.Presenter presenter;
+    private RecyclerViewClickListener recyclerViewClickListener;
 
     public GithubRecyclerAdapter(Activity activity, GithubContract.Presenter presenter,
-                                 List<Repositorio> repositorios) {
+                                 List<Repositorio> repositorios, RecyclerViewClickListener recyclerViewClickListener) {
         this.activity = activity;
         this.presenter = presenter;
         this.repositorios = repositorios;
+        this.recyclerViewClickListener = recyclerViewClickListener;
+    }
+
+    public interface RecyclerViewClickListener {
+        void recyclerViewListClicked(View v, int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,9 +46,15 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
         @BindView(R.id.tvRepoIdNome)
         TextView tvRepoIdNome;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, RecyclerViewClickListener recyclerViewClickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recyclerViewClickListener.recyclerViewListClicked(view, getAdapterPosition());
+                }
+            });
         }
     }
 
@@ -53,7 +65,7 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
 
         View view = inflater.inflate(R.layout.github_recycler_row, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view, this.recyclerViewClickListener);
         return viewHolder;
     }
 
@@ -86,5 +98,9 @@ public class GithubRecyclerAdapter extends RecyclerView.Adapter<GithubRecyclerAd
     public void addAll(List<Repositorio> photos) {
         this.repositorios.addAll(photos);
         notifyDataSetChanged();
+    }
+
+    public List<Repositorio> getRepositorios() {
+        return repositorios;
     }
 }

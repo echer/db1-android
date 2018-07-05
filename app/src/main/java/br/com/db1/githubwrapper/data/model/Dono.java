@@ -2,7 +2,9 @@ package br.com.db1.githubwrapper.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Dono {
+import java.io.Serializable;
+
+public class Dono implements Serializable{
 
     @SerializedName("login")
     private String login;

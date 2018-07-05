@@ -2,7 +2,9 @@ package br.com.db1.githubwrapper.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Repositorio {
+import java.io.Serializable;
+
+public class Repositorio implements Serializable{
 
     @SerializedName("id")
     private long id;

@@ -1,6 +1,7 @@
 package br.com.db1.githubwrapper.ui.github;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +23,12 @@ import javax.inject.Inject;
 import br.com.db1.githubwrapper.BaseActivity;
 import br.com.db1.githubwrapper.R;
 import br.com.db1.githubwrapper.data.model.Repositorio;
+import br.com.db1.githubwrapper.ui.githubdetalhes.GithubDetalhesActivity;
 import br.com.db1.githubwrapper.util.EndlessRecyclerViewScrollListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static br.com.db1.githubwrapper.util.Constants.Activity.Extras.GITHUB_DETALHES_REPOSITORIO;
 
 public class GithubActivity extends BaseActivity implements GithubContract.View {
 
@@ -120,7 +125,18 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
     }
 
     private void initViews() {
-        recyclerAdapter = new GithubRecyclerAdapter(this, presenter, new ArrayList<>());
+        recyclerAdapter = new GithubRecyclerAdapter(this, presenter, new ArrayList<>(), new GithubRecyclerAdapter.RecyclerViewClickListener() {
+            @Override
+            public void recyclerViewListClicked(View v, int position) {
+                if(position != RecyclerView.NO_POSITION){
+                    Repositorio repositorio = recyclerAdapter.getRepositorios().get(position);
+
+                    Intent intent = new Intent(GithubActivity.this, GithubDetalhesActivity.class);
+                    intent.putExtra(GITHUB_DETALHES_REPOSITORIO, repositorio);
+                    startActivity(intent);
+                }
+            }
+        });
         recyclerGithubRepos.setAdapter(recyclerAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -135,11 +151,6 @@ public class GithubActivity extends BaseActivity implements GithubContract.View 
         };
 
         recyclerGithubRepos.addOnScrollListener(endlessScrollListener);
-
-        recyclerGithubRepos.setOnClickListener(view -> {
-             int position = recyclerGithubRepos.getChildViewHolder(view).getAdapterPosition();
-            //CHAMA DETALHES
-        });
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if(!isBuscaUsuario)
