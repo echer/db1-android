@@ -6,6 +6,7 @@ import java.util.Map;
 
 import br.com.db1.githubwrapper.data.DataSource;
 import br.com.db1.githubwrapper.data.model.Repositorio;
+import br.com.db1.githubwrapper.data.model.RepositorioDetalhes;
 import br.com.db1.githubwrapper.util.MainUiThread;
 import br.com.db1.githubwrapper.util.ThreadExecutor;
 import rx.Observable;
@@ -48,7 +49,7 @@ public class RemoteDataSource extends DataSource {
     }
 
     @Override
-    public Observable<Repositorio> obtemRepositorio(String username, String repo) {
+    public Observable<RepositorioDetalhes> obtemRepositorio(String username, String repo) {
         return apiService.obtemRepositorioPorUsuario(username, repo)
                 .flatMap(response -> Observable.just(response));
     }

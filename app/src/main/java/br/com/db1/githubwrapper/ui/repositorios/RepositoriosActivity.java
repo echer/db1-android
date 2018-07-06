@@ -165,7 +165,7 @@ public class RepositoriosActivity extends BaseActivity implements RepositoriosCo
 
         if (!isCriacao) {
             isCriacao = true;
-            presenter.obterRepositorios(getContext().getApplicationContext(), 1);
+            presenter.obterRepositorios(getContext(), 1);
         }
     }
 

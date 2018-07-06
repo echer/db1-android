@@ -22,10 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.repositorios.RepositoriosActivity" />
         <activity
-            android:name=".ui.repositorios.RepositoriosActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".ui.repositoriodetalhes.RepositorioDetalhesActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".ui.repositoriodetalhes.RepositorioDetalhesActivity"
+            android:label="@string/activity_detalhes"></activity>
     </application>
 
 </manifest>

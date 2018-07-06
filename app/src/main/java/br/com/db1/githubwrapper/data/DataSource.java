@@ -3,6 +3,7 @@ package br.com.db1.githubwrapper.data;
 import java.util.List;
 
 import br.com.db1.githubwrapper.data.model.Repositorio;
+import br.com.db1.githubwrapper.data.model.RepositorioDetalhes;
 import br.com.db1.githubwrapper.util.MainUiThread;
 import br.com.db1.githubwrapper.util.ThreadExecutor;
 import rx.Observable;
@@ -25,6 +26,6 @@ public abstract class DataSource {
 
     public abstract Observable<List<Repositorio>> obtemRepositorios(String username);
 
-    public abstract Observable<Repositorio> obtemRepositorio(String username, String repo);
+    public abstract Observable<RepositorioDetalhes> obtemRepositorio(String username, String repo);
 
 }

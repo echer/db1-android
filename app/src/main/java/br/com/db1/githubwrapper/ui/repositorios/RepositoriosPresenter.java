@@ -11,7 +11,8 @@ import rx.Observable;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-import static br.com.db1.githubwrapper.util.Constants.Activity.Extras.GITHUB_DETALHES_REPOSITORIO;
+import static br.com.db1.githubwrapper.util.Constants.Activity.Extras.GITHUB_DETALHES_REPONAME;
+import static br.com.db1.githubwrapper.util.Constants.Activity.Extras.GITHUB_DETALHES_USERNAME;
 
 public class RepositoriosPresenter implements RepositoriosContract.Presenter {
 
@@ -81,7 +82,8 @@ public class RepositoriosPresenter implements RepositoriosContract.Presenter {
         Repositorio repositorio = view.obtemRepositorioPelaPosicao(position);
 
         Intent intent = new Intent(view.getContext(), RepositorioDetalhesActivity.class);
-        intent.putExtra(GITHUB_DETALHES_REPOSITORIO, repositorio);
+        intent.putExtra(GITHUB_DETALHES_USERNAME, repositorio.getDono().getLogin());
+        intent.putExtra(GITHUB_DETALHES_REPONAME, repositorio.getNome());
         view.getContext().startActivity(intent);
     }
 

@@ -27,6 +27,12 @@ public class RepositorioDetalhesModule {
 
     @Provides
     @ActivityScope
+    public RepositorioDetalhesContract.View provideRepositorioDetalhesView(){
+        return repositorioDetalhesActivity;
+    }
+
+    @Provides
+    @ActivityScope
     @ActivityContext
     public Context provideContext() {
         return repositorioDetalhesActivity;

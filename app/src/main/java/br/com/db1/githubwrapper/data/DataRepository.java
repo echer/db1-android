@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import br.com.db1.githubwrapper.data.model.Repositorio;
+import br.com.db1.githubwrapper.data.model.RepositorioDetalhes;
 import br.com.db1.githubwrapper.util.NetworkHelper;
 import rx.Observable;
 import rx.Subscription;
@@ -44,7 +45,7 @@ public class DataRepository {
                         throwable -> onError.call(throwable));
     }
 
-    public Subscription getRepositorio(Context context, String username, String repo,DataSource.Callback<Repositorio> onSuccess, DataSource.Callback<Throwable> onError){
+    public Subscription getRepositorio(Context context, String username, String repo, DataSource.Callback<RepositorioDetalhes> onSuccess, DataSource.Callback<Throwable> onError){
 
         if (!networkHelper.isNetworkAvailable(context))
             return null;
