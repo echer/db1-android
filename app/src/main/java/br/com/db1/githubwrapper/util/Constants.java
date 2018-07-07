@@ -12,4 +12,9 @@ public interface Constants {
     interface Date {
         String PATTERN_BRASIL = "dd/MM/yyyy";
     }
+
+    interface Database{
+        String DATABASE_NAME = "db1.db";
+        int VERSION = 1;
+    }
 }

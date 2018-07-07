@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -155,6 +156,12 @@ public class RepositorioDetalhesActivity extends BaseActivity implements Reposit
 
     @Override
     public void exibirRepositorio(RepositorioDetalhes repositorio) {
+        if(repositorio == null) {
+            Toast.makeText(this, getString(R.string.repositorio_detalhes_repositorio_nao_encontrado), Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         repositorioNome.setText(String.format("%s - %s", String.valueOf(repositorio.getId()), repositorio.getNome()));
         repositorioDescricao.setText(repositorio.getDescricao() != null ? repositorio.getDescricao() : "");
         repositorioUltimaAtualizacao.setText(repositorio.getDataUltimaAtualizacao() != null ? new SimpleDateFormat(PATTERN_BRASIL).format(repositorio.getDataUltimaAtualizacao()) : "");

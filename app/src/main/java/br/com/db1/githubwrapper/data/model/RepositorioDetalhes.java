@@ -1,15 +1,24 @@
 package br.com.db1.githubwrapper.data.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.Date;
 
-public class RepositorioDetalhes {
+import br.com.db1.githubwrapper.data.local.LocalDatabase;
 
+@Table(database = LocalDatabase.class, allFields = true)
+public class RepositorioDetalhes extends BaseModel {
+
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 
     @SerializedName("owner")
+    @ForeignKey(stubbedRelationship = true)
     private Dono dono;
 
     @SerializedName("name")
@@ -34,6 +43,7 @@ public class RepositorioDetalhes {
     private Long countIncidentesAbertos;
 
     @SerializedName("license")
+    @ForeignKey(stubbedRelationship = true)
     private Licensa licensa;
 
     public long getId() {

@@ -3,7 +3,6 @@
     <string name="images_db1_logo">Logo da DB1</string>
     <string name="offline_message">Você não esta conectado...</string>
     <string name="repositorios_nao_encontrados">Nenhum repositório encontrado</string>
-    <string name="search">Buscar por Usuario</string>
     <string name="search_hint">Digite o usuário</string>
     <string name="content_github_detalhes_identificacao">Repositório</string>
     <string name="content_github_detalhes_descricao">Descrição</string>
@@ -15,4 +14,5 @@
     <string name="content_github_detalhes_nome_licensa">Licensa</string>
     <string name="activity_detalhes">Detalhes do Repositório</string>
     <string name="repositorio_detalhes_carregando">Carregando detalhes do repositório...</string>
+    <string name="repositorio_detalhes_repositorio_nao_encontrado">Detalhes do repositório não encontrado... verifique sua conexão!</string>
 </resources>

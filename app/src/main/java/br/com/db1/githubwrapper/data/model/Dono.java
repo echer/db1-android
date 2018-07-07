@@ -1,11 +1,18 @@
 package br.com.db1.githubwrapper.data.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.io.Serializable;
 
-public class Dono implements Serializable{
+import br.com.db1.githubwrapper.data.local.LocalDatabase;
 
+@Table(database = LocalDatabase.class, allFields = true)
+public class Dono extends BaseModel {
+
+    @PrimaryKey
     @SerializedName("login")
     private String login;
 

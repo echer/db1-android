@@ -1,11 +1,19 @@
 package br.com.db1.githubwrapper.data.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.io.Serializable;
 
-public class Repositorio implements Serializable{
+import br.com.db1.githubwrapper.data.local.LocalDatabase;
 
+@Table(database = LocalDatabase.class, allFields = true)
+public class Repositorio extends BaseModel {
+
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 
@@ -15,6 +23,7 @@ public class Repositorio implements Serializable{
     @SerializedName("description")
     private String descricao;
 
+    @ForeignKey(stubbedRelationship = true)
     @SerializedName("owner")
     private Dono dono;
 
