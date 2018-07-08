@@ -26,24 +26,12 @@ public class DataRepository {
     }
 
     public Subscription getRepositorios(Context context, int page, DataSource.Callback<List<Repositorio>> onSuccess, DataSource.Callback<Throwable> onError) {
-        return getRepositorios(context, null, page, onSuccess, onError);
-    }
-
-    public Subscription getRepositorios(Context context, String username, int page, DataSource.Callback<List<Repositorio>> onSuccess, DataSource.Callback<Throwable> onError) {
-
         Observable<List<Repositorio>> observable;
 
-        if (!networkHelper.isNetworkAvailable(context)){
-            if (username != null)
-                observable = localDataSource.obtemRepositorios(username);
-            else
-                observable = localDataSource.obtemRepositorios(page);
-        }else {
-            if (username != null)
-                observable = remoteDataSource.obtemRepositorios(username).doOnNext(repositorios -> ((LocalDataSource) localDataSource).storeRepositorios(repositorios));
-            else
-                observable = remoteDataSource.obtemRepositorios(page).doOnNext(repositorios -> ((LocalDataSource) localDataSource).storeRepositorios(repositorios));
-        }
+        if (!networkHelper.isNetworkAvailable(context))
+            observable = localDataSource.obtemRepositorios(page);
+        else
+            observable = remoteDataSource.obtemRepositorios(page).doOnNext(repositorios -> ((LocalDataSource) localDataSource).storeRepositorios(repositorios));
 
         return observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,13 +40,29 @@ public class DataRepository {
                         throwable -> onError.call(throwable));
     }
 
-    public Subscription getRepositorio(Context context, String username, String repo, DataSource.Callback<RepositorioDetalhes> onSuccess, DataSource.Callback<Throwable> onError){
+    public Subscription getRepositorios(Context context, String username, DataSource.Callback<List<Repositorio>> onSuccess, DataSource.Callback<Throwable> onError) {
+
+        Observable<List<Repositorio>> observable;
+
+        if (!networkHelper.isNetworkAvailable(context))
+            observable = localDataSource.obtemRepositorios(username);
+        else
+            observable = remoteDataSource.obtemRepositorios(username).doOnNext(repositorios -> ((LocalDataSource) localDataSource).storeRepositorios(repositorios));
+
+        return observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        repositorio -> onSuccess.call(repositorio),
+                        throwable -> onError.call(throwable));
+    }
+
+    public Subscription getRepositorio(Context context, String username, String repo, DataSource.Callback<RepositorioDetalhes> onSuccess, DataSource.Callback<Throwable> onError) {
 
         Observable<RepositorioDetalhes> observable;
 
-        if (!networkHelper.isNetworkAvailable(context)){
+        if (!networkHelper.isNetworkAvailable(context)) {
             observable = localDataSource.obtemRepositorio(username, repo);
-        }else{
+        } else {
             observable = remoteDataSource.obtemRepositorio(username, repo).doOnNext(repositorioDetalhes -> ((LocalDataSource) localDataSource).storeRepositorioDetalhes(repositorioDetalhes));
         }
 

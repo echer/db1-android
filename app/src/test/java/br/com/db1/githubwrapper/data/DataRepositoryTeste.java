@@ -23,6 +23,7 @@ import rx.schedulers.Schedulers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -71,6 +72,29 @@ public class DataRepositoryTeste {
     }
 
     @Test
+    public void getRepositoriosUsuario_deveObterDoRepositorioRemotoEArmazenarLocal(){
+        //GARANTE QUE A CHAMADA DA VERIFICAÇÃO DE REDE SEMPRE RETORNE TRUE
+        when(mockNetworkHelper.isNetworkAvailable(mockContext)).thenReturn(true);
+
+        //GARANTE QUE A CHAMADA SEMPRE RETORNE UM OBSERVER DA LISTA DE REPOSITORIOS
+        when(mockRemoteDataSource.obtemRepositorios(anyString())).thenReturn(Observable.just(mockRepositorios));
+
+        //TESTA O MÉTODO PARA BUSCAR OS REPOSITORIOS
+        dataRepository.getRepositorios(mockContext, anyString(), mockOnSuccess, mockOnError);
+
+        //TESTA O METODO DO REMOTE DATASOURCE PARA OBTER OS REPOSITORIOS
+        verify(mockRemoteDataSource).obtemRepositorios(anyString());
+        //TESTA O METODO DO LOCAL DATASROUCE PARA SALVAR OS REPOSITORIOS
+        verify(mockLocalDataSource).storeRepositorios(mockRepositorios);
+
+        //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A LISTA DE REPOSITORIOS
+        verify(mockOnSuccess).call(mockRepositorios);
+
+        //VERIFICA SE NÃO ESTOUROU NENHUM ERRO NO CALLBACK
+        verify(mockOnError, never()).call(any(Throwable.class));
+    }
+
+    @Test
     public void getRepositorios_deveObterDoRepositorioRemotoEArmazenarLocal(){
         //GARANTE QUE A CHAMADA DA VERIFICAÇÃO DE REDE SEMPRE RETORNE TRUE
         when(mockNetworkHelper.isNetworkAvailable(mockContext)).thenReturn(true);
@@ -115,6 +139,36 @@ public class DataRepositoryTeste {
 
         //TESTA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
         verify(mockLocalDataSource).obtemRepositorios(anyInt());
+
+        //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A LISTA DE REPOSITORIOS
+        verify(mockOnSuccess).call(mockRepositorios);
+
+        //VERIFICA SE NÃO ESTOUROU NENHUM ERRO NO CALLBACK
+        verify(mockOnError, never()).call(any(Throwable.class));
+    }
+
+    @Test
+    public void getRepositoriosUsuario_deveObterDoRepositorioLocal(){
+        //GARANTE QUE A CHAMADA DA VERIFICAÇÃO DE REDE SEMPRE RETORNE FALSE
+        when(mockNetworkHelper.isNetworkAvailable(mockContext)).thenReturn(false);
+
+        //GARANTE QUE A CHAMADA SEMPRE RETORNE UM OBSERVER DA LISTA DE REPOSITORIOS
+        when(mockLocalDataSource.obtemRepositorios(anyString())).thenReturn(Observable.just(mockRepositorios));
+
+        //TESTA O MÉTODO PARA BUSCAR OS REPOSITORIOS
+        dataRepository.getRepositorios(mockContext, anyString(), mockOnSuccess, mockOnError);
+
+        //TESTA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
+        verify(mockLocalDataSource).obtemRepositorios(anyString());
+
+        //TESTA SE O REMOTE REPOSITORY NÃO FOI CHAMADO
+        verify(mockRemoteDataSource, never()).obtemRepositorios(anyString());
+
+        //TESTA SE O LOCAL REPOSITORY NÃO FOI CHAMADO PARA ARMAZENAR AS FOTOS
+        verify(mockLocalDataSource, never()).storeRepositorios(mockRepositorios);
+
+        //TESTA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
+        verify(mockLocalDataSource).obtemRepositorios(anyString());
 
         //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A LISTA DE REPOSITORIOS
         verify(mockOnSuccess).call(mockRepositorios);

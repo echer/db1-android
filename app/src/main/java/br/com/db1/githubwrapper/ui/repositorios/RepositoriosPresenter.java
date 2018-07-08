@@ -51,7 +51,6 @@ public class RepositoriosPresenter implements RepositoriosContract.Presenter {
         Subscription subscription = dataRepository.getRepositorios(
                 context,
                 username,
-                1,
                 repositorios -> {
                     view.limparRepositorios();
                     if(repositorios != null)
