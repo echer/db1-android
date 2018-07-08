@@ -12,6 +12,7 @@ import java.util.List;
 
 import br.com.db1.githubwrapper.data.local.LocalDataSource;
 import br.com.db1.githubwrapper.data.model.Repositorio;
+import br.com.db1.githubwrapper.data.model.RepositorioDetalhes;
 import br.com.db1.githubwrapper.data.remote.RemoteDataSource;
 import br.com.db1.githubwrapper.util.NetworkHelper;
 import br.com.db1.githubwrapper.util.RxJavaTestRunner;
@@ -47,7 +48,13 @@ public class DataRepositoryTeste {
     List<Repositorio> mockRepositorios;
 
     @Mock
+    RepositorioDetalhes mockRepositoriosDetalhes;
+
+    @Mock
     DataSource.Callback<List<Repositorio>> mockOnSuccess;
+
+    @Mock
+    DataSource.Callback<RepositorioDetalhes> mockOnSuccessDetalhes;
 
     @Mock
     DataSource.Callback<Throwable> mockOnError;
@@ -72,6 +79,31 @@ public class DataRepositoryTeste {
     }
 
     @Test
+    public void getRepositoriosDetalhesUsuario_deveObterDoRepositorioRemotoEArmazenarLocal(){
+        String anyString = "";
+
+        //GARANTE QUE A CHAMADA DA VERIFICAÇÃO DE REDE SEMPRE RETORNE TRUE
+        when(mockNetworkHelper.isNetworkAvailable(mockContext)).thenReturn(true);
+
+        //GARANTE QUE A CHAMADA SEMPRE RETORNE UM OBSERVER DOS DETALHES DO REPOSITORIO
+        when(mockRemoteDataSource.obtemRepositorio(anyString, anyString)).thenReturn(Observable.just(mockRepositoriosDetalhes));
+
+        //TESTA O MÉTODO PARA BUSCAR OS DETALHES DO REPOSITORIO
+        dataRepository.getRepositorio(mockContext, anyString, anyString, mockOnSuccessDetalhes, mockOnError);
+
+        //VERIFICA O METODO DO REMOTE DATASOURCE PARA OBTER OS DETALHES DO REPOSITORIO
+        verify(mockRemoteDataSource).obtemRepositorio(anyString, anyString);
+        //VERIFICA O METODO DO LOCAL DATASROUCE PARA SALVAR OS DETALHES DO REPOSITORIO
+        verify(mockLocalDataSource).storeRepositorioDetalhes(mockRepositoriosDetalhes);
+
+        //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A OS DETALHES DO REPOSITORIO
+        verify(mockOnSuccessDetalhes).call(mockRepositoriosDetalhes);
+
+        //VERIFICA SE NÃO ESTOUROU NENHUM ERRO NO CALLBACK
+        verify(mockOnError, never()).call(any(Throwable.class));
+    }
+
+    @Test
     public void getRepositoriosUsuario_deveObterDoRepositorioRemotoEArmazenarLocal(){
         //GARANTE QUE A CHAMADA DA VERIFICAÇÃO DE REDE SEMPRE RETORNE TRUE
         when(mockNetworkHelper.isNetworkAvailable(mockContext)).thenReturn(true);
@@ -82,9 +114,10 @@ public class DataRepositoryTeste {
         //TESTA O MÉTODO PARA BUSCAR OS REPOSITORIOS
         dataRepository.getRepositorios(mockContext, anyString(), mockOnSuccess, mockOnError);
 
-        //TESTA O METODO DO REMOTE DATASOURCE PARA OBTER OS REPOSITORIOS
+        //VERIFICA O METODO DO REMOTE DATASOURCE PARA OBTER OS REPOSITORIOS
         verify(mockRemoteDataSource).obtemRepositorios(anyString());
-        //TESTA O METODO DO LOCAL DATASROUCE PARA SALVAR OS REPOSITORIOS
+
+        //VERIFICA O METODO DO LOCAL DATASROUCE PARA SALVAR OS REPOSITORIOS
         verify(mockLocalDataSource).storeRepositorios(mockRepositorios);
 
         //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A LISTA DE REPOSITORIOS
@@ -105,9 +138,10 @@ public class DataRepositoryTeste {
         //TESTA O MÉTODO PARA BUSCAR OS REPOSITORIOS
         dataRepository.getRepositorios(mockContext, anyInt(), mockOnSuccess, mockOnError);
 
-        //TESTA O METODO DO REMOTE DATASOURCE PARA OBTER OS REPOSITORIOS
+        //VERIFICA O METODO DO REMOTE DATASOURCE PARA OBTER OS REPOSITORIOS
         verify(mockRemoteDataSource).obtemRepositorios(anyInt());
-        //TESTA O METODO DO LOCAL DATASROUCE PARA SALVAR OS REPOSITORIOS
+
+        //VERIFICA O METODO DO LOCAL DATASROUCE PARA SALVAR OS REPOSITORIOS
         verify(mockLocalDataSource).storeRepositorios(mockRepositorios);
 
         //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A LISTA DE REPOSITORIOS
@@ -128,16 +162,16 @@ public class DataRepositoryTeste {
         //TESTA O MÉTODO PARA BUSCAR OS REPOSITORIOS
         dataRepository.getRepositorios(mockContext, anyInt(), mockOnSuccess, mockOnError);
 
-        //TESTA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
+        //VERIFICA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
         verify(mockLocalDataSource).obtemRepositorios(anyInt());
 
-        //TESTA SE O REMOTE REPOSITORY NÃO FOI CHAMADO
+        //VERIFICA SE O REMOTE REPOSITORY NÃO FOI CHAMADO
         verify(mockRemoteDataSource, never()).obtemRepositorios(anyInt());
 
-        //TESTA SE O LOCAL REPOSITORY NÃO FOI CHAMADO PARA ARMAZENAR AS FOTOS
+        //VERIFICA SE O LOCAL REPOSITORY NÃO FOI CHAMADO PARA ARMAZENAR OS REPOSITORIOS
         verify(mockLocalDataSource, never()).storeRepositorios(mockRepositorios);
 
-        //TESTA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
+        //VERIFICA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
         verify(mockLocalDataSource).obtemRepositorios(anyInt());
 
         //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A LISTA DE REPOSITORIOS
@@ -158,20 +192,52 @@ public class DataRepositoryTeste {
         //TESTA O MÉTODO PARA BUSCAR OS REPOSITORIOS
         dataRepository.getRepositorios(mockContext, anyString(), mockOnSuccess, mockOnError);
 
-        //TESTA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
+        //VERIFICA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
         verify(mockLocalDataSource).obtemRepositorios(anyString());
 
-        //TESTA SE O REMOTE REPOSITORY NÃO FOI CHAMADO
+        //VERIFICA SE O REMOTE REPOSITORY NÃO FOI CHAMADO
         verify(mockRemoteDataSource, never()).obtemRepositorios(anyString());
 
-        //TESTA SE O LOCAL REPOSITORY NÃO FOI CHAMADO PARA ARMAZENAR AS FOTOS
+        //VERIFICA SE O LOCAL REPOSITORY NÃO FOI CHAMADO PARA ARMAZENAR OS REPOSITORIOS
         verify(mockLocalDataSource, never()).storeRepositorios(mockRepositorios);
 
-        //TESTA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
+        //VERIFICA O METODO DO LOCAL DATASOURCE PARA OBTER OS REPOSITORIOS
         verify(mockLocalDataSource).obtemRepositorios(anyString());
 
         //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU A LISTA DE REPOSITORIOS
         verify(mockOnSuccess).call(mockRepositorios);
+
+        //VERIFICA SE NÃO ESTOUROU NENHUM ERRO NO CALLBACK
+        verify(mockOnError, never()).call(any(Throwable.class));
+    }
+
+    @Test
+    public void getRepositorioDetalhesUsuario_deveObterDoRepositorioLocal(){
+        String anyString = "";
+
+        //GARANTE QUE A CHAMADA DA VERIFICAÇÃO DE REDE SEMPRE RETORNE FALSE
+        when(mockNetworkHelper.isNetworkAvailable(mockContext)).thenReturn(false);
+
+        //GARANTE QUE A CHAMADA SEMPRE RETORNE UM OBSERVER DOS DETALHES DO REPOSITORIO
+        when(mockLocalDataSource.obtemRepositorio(anyString, anyString)).thenReturn(Observable.just(mockRepositoriosDetalhes));
+
+        //TESTA O MÉTODO PARA BUSCAR OS DETALHES DO REPOSITORIO
+        dataRepository.getRepositorio(mockContext, anyString, anyString, mockOnSuccessDetalhes, mockOnError);
+
+        //VERIFICA O METODO DO LOCAL DATASOURCE PARA OBTER OS DETALHES DO REPOSITORIO
+        verify(mockLocalDataSource).obtemRepositorio(anyString, anyString);
+
+        //VERIFICA SE O REMOTE REPOSITORY NÃO FOI CHAMADO
+        verify(mockRemoteDataSource, never()).obtemRepositorio(anyString, anyString);
+
+        //VERIFICA SE O LOCAL REPOSITORY NÃO FOI CHAMADO PARA ARMAZENAR OS DETALHES DO REPOSITORIO
+        verify(mockLocalDataSource, never()).storeRepositorioDetalhes(mockRepositoriosDetalhes);
+
+        //VERIFICA O METODO DO LOCAL DATASOURCE PARA OBTER OS DETALHES DO REPOSITORIO
+        verify(mockLocalDataSource).obtemRepositorio(anyString, anyString);
+
+        //VERIFICA SE O CALLBACK DE SUCESSO CHAMOU OS DETALHES DO REPOSITORIO
+        verify(mockOnSuccessDetalhes).call(mockRepositoriosDetalhes);
 
         //VERIFICA SE NÃO ESTOUROU NENHUM ERRO NO CALLBACK
         verify(mockOnError, never()).call(any(Throwable.class));
