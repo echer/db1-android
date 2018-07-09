@@ -53,8 +53,7 @@ public class RepositoriosPresenter implements RepositoriosContract.Presenter {
                 username,
                 repositorios -> {
                     view.limparRepositorios();
-                    if(repositorios != null)
-                        view.exibirRepositorios(repositorios);
+                    view.exibirRepositorios(repositorios);
                     view.setProgressBar(false);
                 },
                 throwable -> {

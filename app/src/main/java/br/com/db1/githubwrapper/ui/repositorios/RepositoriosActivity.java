@@ -182,7 +182,14 @@ public class RepositoriosActivity extends BaseActivity implements RepositoriosCo
 
     @Override
     public void exibirRepositorios(List<Repositorio> repositorios) {
-        recyclerAdapter.addAll(repositorios);
+        if(repositorios == null || repositorios.isEmpty()){
+            tvNotFound.setVisibility(View.VISIBLE);
+            recyclerGithubRepos.setVisibility(View.GONE);
+        }else{
+            tvNotFound.setVisibility(View.GONE);
+            recyclerGithubRepos.setVisibility(View.VISIBLE);
+            recyclerAdapter.addAll(repositorios);
+        }
     }
 
     @Override
@@ -199,6 +206,8 @@ public class RepositoriosActivity extends BaseActivity implements RepositoriosCo
     public void showOfflineMsg(boolean networkAvailable) {
         if (!networkAvailable)
             Toast.makeText(this, getString(R.string.offline_message), Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, getString(R.string.online_message), Toast.LENGTH_SHORT).show();
     }
 
     private void registerEventListeners() {
