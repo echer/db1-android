@@ -40,7 +40,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/repositorios_nao_encontrados"
-        android:textAppearance="?android:textAppearanceMedium"
+        android:textAppearance="?android:textAppearanceLarge"
         android:visibility="gone" />
 
 </android.support.constraint.ConstraintLayout>
