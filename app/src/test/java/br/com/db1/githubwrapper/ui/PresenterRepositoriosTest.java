@@ -97,6 +97,7 @@ public class PresenterRepositoriosTest {
         onSuccessCaptor.getValue().call(mockRepositorios);
         onErrorCaptor.getValue().call(any(Throwable.class));
 
+        verify(mockViewRepositorio).limparRepositorios();
         verify(mockViewRepositorio).exibirRepositorios(mockRepositorios);
     }
 
