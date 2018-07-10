@@ -40,12 +40,9 @@ public class RepositoriosRecyclerAdapter extends RecyclerView.Adapter<Repositori
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (getAdapterPosition() != RecyclerView.NO_POSITION)
-                        presenter.abreDetalhesDoRepositorio(getAdapterPosition());
-                }
+            itemView.setOnClickListener(view -> {
+                if (getAdapterPosition() != RecyclerView.NO_POSITION)
+                    presenter.abreDetalhesDoRepositorio(getAdapterPosition());
             });
         }
     }
